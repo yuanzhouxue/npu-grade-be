@@ -34,15 +34,14 @@ async def logout(session):
 # 通过html代码获取成绩表
 def get_grade_table(html: str) -> list:
     grade_content_soup = bs(html, "html.parser")
-    grid = grade_content_soup.find_all('div', 'grid')
+    grid = grade_content_soup.find_all('div', class_='grid')
 
-    if len(grid): grid = grid[0]
-    else: return {}
+    if not len(grid): return {}
 
     grade_table = {}
     semisters = []
 
-    for tr in grid.table.tbody:
+    for tr in grid[0].find('tbody').find_all('tr'):
         if isinstance(tr, bs4.element.Tag):
             tds = tr('td')
             semister = tds[0].string
